@@ -5,6 +5,15 @@
         <h1>Add Admin</h1>
         <br />
 
+        <?php 
+            if(isset($_SESSION['add']))// checking  the session is set or not
+            {
+                echo $_SESSION['add'];
+                unset($_SESSION['add']);
+            }
+        ?>
+
+
         <form action="" method="POST">
             <table class="tbl-30">
                 <tr>
@@ -72,7 +81,7 @@
         //Create a session variable to display message
         $_SESSION['add'] = "Admin Added Successfully";
         //Redirect Page to manage admin
-        header("location:",SITEURL,'admin/manage-admin.php');
+        header("location:".SITEURL.'admin/manage-admin.php');
     }
     else
     {
@@ -81,7 +90,7 @@
          //Create a session variable to display message
          $_SESSION['add'] = "Failed to add admin";
          //Redirect Page to manage admin
-         header("location:",SITEURL,'admin/add-admin.php');
+         header("location:".SITEURL.'admin/add-admin.php');
 
     }
  }
