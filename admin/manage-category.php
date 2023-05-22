@@ -54,7 +54,7 @@
                 
 
                 <!--button to add admin--> 
-                <a href="add-category.php" class="btn-primary">Add Category</a>
+                <a href="<?php echo SITEURL; ?>admin/add-category.php" class="btn-primary">Add Category</a>
 
                 <br /> <br />
                 
