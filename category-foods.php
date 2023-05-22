@@ -1,124 +1,115 @@
 <?php include('partials-front/menu.php'); ?>
 
-    <!-- food search Section Starts Here -->
+<?php 
+        //CHeck whether id is passed or not
+        if(isset($_GET['category_id']))
+        {
+            //Category id is set and get the id
+            $category_id = $_GET['category_id'];
+            // Get the CAtegory Title Based on Category ID
+            $sql = "SELECT title FROM tbl_category WHERE id=$category_id";
+
+            //Execute the Query
+            $res = mysqli_query($conn, $sql);
+
+            //Get the value from Database
+            $row = mysqli_fetch_assoc($res);
+            //Get the TItle
+            $category_title = $row['title'];
+        }
+        else
+        {
+            //CAtegory not passed
+            //Redirect to Home page
+            header('location:'.SITEURL);
+        }
+    ?>
+
+
+    <!-- fOOD sEARCH Section Starts Here -->
     <section class="food-search text-center">
         <div class="container">
             
-            <h2>Foods on <a href="#" class="text-white">"Category"</a></h2>
+            <h2>Foods on <a href="#" class="text-white">"<?php echo $category_title; ?>"</a></h2>
 
         </div>
     </section>
-    <!-- food search Section Ends Here -->
+    <!-- fOOD sEARCH Section Ends Here -->
 
 
 
-    <!-- food menu Section Starts Here -->
+    <!-- fOOD MEnu Section Starts Here -->
     <section class="food-menu">
         <div class="container">
             <h2 class="text-center">Food Menu</h2>
 
-            <div class="food-menu-box">
-                <div class="food-menu-img">
-                    <img src="images/burger-1.jpg" alt="Burger" class="img-responsive img-curve">
-                </div>
+            <?php 
+            
+                //Create SQL Query to Get foods based on Selected CAtegory
+                $sql2 = "SELECT * FROM tbl_food WHERE category_id=$category_id";
 
-                <div class="food-menu-desc">
-                    <h4>Chicken Cheese Burger</h4>
-                    <p class="food-price">230 Tk</p>
-                    <p class="food-detail">
-                        Made with Cheese, Chicken, and organice vegetables.
-                    </p>
-                    <br>
+                //Execute the Query
+                $res2 = mysqli_query($conn, $sql2);
 
-                    <a href="order.html" class="btn btn-primary">Order Now</a>
-                </div>
-            </div>
+                //Count the Rows
+                $count2 = mysqli_num_rows($res2);
 
-            <div class="food-menu-box">
-                <div class="food-menu-img">
-                    <img src="images/menu-burger.jpg" alt="Beef Burger" class="img-responsive img-curve">
-                </div>
+                //CHeck whether food is available or not
+                if($count2>0)
+                {
+                    //Food is Available
+                    while($row2=mysqli_fetch_assoc($res2))
+                    {
+                        $id = $row2['id'];
+                        $title = $row2['title'];
+                        $price = $row2['price'];
+                        $description = $row2['description'];
+                        $image_name = $row2['image_name'];
+                        ?>
+                        
+                        <div class="food-menu-box">
+                            <div class="food-menu-img">
+                                <?php 
+                                    if($image_name=="")
+                                    {
+                                        //Image not Available
+                                        echo "<div class='error'>Image not Available.</div>";
+                                    }
+                                    else
+                                    {
+                                        //Image Available
+                                        ?>
+                                        <img src="<?php echo SITEURL; ?>images/food/<?php echo $image_name; ?>" alt="Chicke Hawain Pizza" class="img-responsive img-curve">
+                                        <?php
+                                    }
+                                ?>
+                                
+                            </div>
 
-                <div class="food-menu-desc">
-                    <h4>Smoky Burger</h4>
-                    <p class="food-price">350 Tk</p>
-                    <p class="food-detail">
-                        Made with Beef,Special Sauce and organic vegetables.
-                    </p>
-                    <br>
+                            <div class="food-menu-desc">
+                                <h4><?php echo $title; ?></h4>
+                                <p class="food-price">$<?php echo $price; ?></p>
+                                <p class="food-detail">
+                                    <?php echo $description; ?>
+                                </p>
+                                <br>
 
-                    <a href="#" class="btn btn-primary">Order Now</a>
-                </div>
-            </div>
+                                <a href="<?php echo SITEURL; ?>order.php?food_id=<?php echo $id; ?>" class="btn btn-primary">Order Now</a>
+                            </div>
+                        </div>
 
-            <div class="food-menu-box">
-                <div class="food-menu-img">
-                    <img src="images/hot-coffee-food.jpg" alt="Coffee" class="img-responsive img-curve">
-                </div>
+                        <?php
+                    }
+                }
+                else
+                {
+                    //Food not available
+                    echo "<div class='error'>Food not Available.</div>";
+                }
+            
+            ?>
 
-                <div class="food-menu-desc">
-                    <h4>Hot Coffee</h4>
-                    <p class="food-price">150 Tk</p>
-                    <p class="food-detail">
-                        Made with Coffee,milk and water.
-                    </p>
-                    <br>
-
-                    <a href="#" class="btn btn-primary">Order Now</a>
-                </div>
-            </div>
-
-            <div class="food-menu-box">
-                <div class="food-menu-img">
-                    <img src="images/menu-pizza.jpg" alt="BBQ Pizza" class="img-responsive img-curve">
-                </div>
-
-                <div class="food-menu-desc">
-                    <h4>BBQ Pizza</h4>
-                    <p class="food-price">600 Tk</p>
-                    <p class="food-detail">
-                        Made with  BBQ Sauce,Chicken, and vegetables.
-                    </p>
-                    <br>
-
-                    <a href="#" class="btn btn-primary">Order Now</a>
-                </div>
-            </div>
-
-            <div class="food-menu-box">
-                <div class="food-menu-img">
-                    <img src="images/chowmin1.jpg" alt="Chowmin" class="img-responsive img-curve">
-                </div>
-
-                <div class="food-menu-desc">
-                    <h4>Chicken Chowmin</h4>
-                    <p class="food-price">170 Tk</p>
-                    <p class="food-detail">
-                        Made with Chicken,Chowmin and Vegetables.
-                    </p>
-                    <br>
-
-                    <a href="#" class="btn btn-primary">Order Now</a>
-                </div>
-            </div>
-
-            <div class="food-menu-box">
-                <div class="food-menu-img">
-                    <img src="images/menu-momo.jpg" alt="Chicken Momo" class="img-responsive img-curve">
-                </div>
-
-                <div class="food-menu-desc">
-                    <h4>Chicken Steam Momo</h4>
-                    <p class="food-price">350 Tk</p>
-                    <p class="food-detail">
-                        Made with Chicken, and Vegetables.
-                    </p>
-                    <br>
-
-                    <a href="#" class="btn btn-primary">Order Now</a>
-                </div>
-            </div>
-
+            
 
             <div class="clearfix"></div>
 
@@ -127,6 +118,6 @@
         </div>
 
     </section>
-    <!-- food Menu section Ends Here -->
+    <!-- fOOD Menu Section Ends Here -->
 
     <?php include('partials-front/footer.php'); ?>
